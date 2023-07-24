@@ -96,9 +96,7 @@ const Register = () => {
     }
     if (registerUserState.isRegister === REQUEST_STATE.SUCCESS) {
       NotificationManager.success('Bạn đã đăng ký tài khoản thành công', 'Thành công');
-      setTimeout(() => {
-        history.push('/login');
-      }, 500)
+      history.push('/login');
       dispatch(resetRegister());
     }
   }, [registerUserState.isRegister])
@@ -149,11 +147,10 @@ const Register = () => {
             justifyContent: 'flex-end',
             width: '100%',
           }}>
-            <Button type="submit">{registerUserState?.isRegister === REQUEST_STATE.REQUEST ? 'Đợi chút...' : 'Đăng ký'}</Button>
+            <Button disabled={registerUserState?.isRegister === REQUEST_STATE.REQUEST} type="submit">{registerUserState?.isRegister === REQUEST_STATE.REQUEST ? 'Đợi chút...' : 'Đăng ký'}</Button>
           </div>
         </Form>
       </Wrapper>
-      <NotificationContainer />
     </Container>
   );
 };
