@@ -23,11 +23,11 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
-app.use("/api/products", productRoute); // nó là cái này
+app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/checkout", stripeRoute);
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log("Backend server is running!");
+  console.log("Backend server is running at http://localhost:5000 !");
 });
