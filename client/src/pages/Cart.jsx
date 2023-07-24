@@ -172,7 +172,7 @@ const Cart = () => {
   };
 
   const calculateTotalPrice = () => {
-    console.log("cart: ", cart);
+    
     return new Intl.NumberFormat("vi-VN").format(
       (cart?.products ?? []).reduce(
         (result, productInfo) =>
