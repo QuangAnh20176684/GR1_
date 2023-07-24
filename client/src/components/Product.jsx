@@ -3,8 +3,12 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@material-ui/icons";
+import { NotificationManager } from "react-notifications";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { addProduct } from "../redux/cartRedux";
 
 const Info = styled.div`
   opacity: 0;
@@ -33,7 +37,7 @@ const Container = styled.div`
   background-color: #f5fbfd;
   position: relative;
 
-  &:hover ${Info}{
+  &:hover ${Info} {
     opacity: 1;
   }
 `;
@@ -68,17 +72,27 @@ const Icon = styled.div`
 `;
 
 const Product = ({ item }) => {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const addToCart = () => {
+    dispatch(
+      addProduct({
+        quantity: 1,
+        product: item,
+      })
+    );
+  };
   return (
     <Container>
       <Circle />
       <Image src={item.img} />
       <Info>
-        <Icon>
+        <Icon onClick={() => addToCart(item?._id)}>
           <ShoppingCartOutlined />
         </Icon>
         <Icon>
           <Link to={`/product/${item._id}`}>
-          <SearchOutlined />
+            <SearchOutlined />
           </Link>
         </Icon>
         <Icon>

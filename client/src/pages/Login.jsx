@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { login } from "../redux/apiCalls";
 import { mobile } from "../responsive";
 
-import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { REQUEST_STATE } from "../configs";
 import { resetLogin } from "../redux/userRedux";
@@ -80,13 +79,12 @@ const Login = () => {
 
   useEffect(() => {
     if (isRequestLogin === REQUEST_STATE.SUCCESS) {
-      setTimeout(() => {
-        history.push("/");
-      }, 700);
-      NotificationManager.error(
+      NotificationManager.success(
         "Đăng nhập thành công",
         "Thành công"
       );
+      history.push("/");
+
       dispatch(resetLogin());
     }
     if (isRequestLogin === REQUEST_STATE.FAILURE) {

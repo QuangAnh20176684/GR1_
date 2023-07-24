@@ -1,5 +1,5 @@
 import { Add, Remove } from "@material-ui/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
@@ -9,6 +9,7 @@ import StripeCheckout from "react-stripe-checkout";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { useHistory } from "react-router-dom";
+import { decreaseProduct, increaseProduct } from "../redux/cartRedux";
 
 const KEY = process.env.REACT_APP_STRIPE;
 
@@ -63,6 +64,7 @@ const Info = styled.div`
 const Product = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
   ${mobile({ flexDirection: "column" })}
 `;
 
@@ -163,9 +165,21 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [stripeToken, setStripeToken] = useState(null);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const onToken = (token) => {
     setStripeToken(token);
+  };
+
+  const calculateTotalPrice = () => {
+    console.log("cart: ", cart);
+    return new Intl.NumberFormat("vi-VN").format(
+      (cart?.products ?? []).reduce(
+        (result, productInfo) =>
+          result + productInfo.quantity * productInfo.product.price,
+        0
+      )
+    );
   };
 
   useEffect(() => {
@@ -177,7 +191,8 @@ const Cart = () => {
         });
         history.push("/success", {
           stripeData: res.data,
-          products: cart, });
+          products: cart,
+        });
       } catch {}
     };
     stripeToken && makeRequest();
@@ -191,38 +206,58 @@ const Cart = () => {
         <Top>
           <TopButton>CONTINUE SHOPPING</TopButton>
           <TopTexts>
-            <TopText>Shopping Bag(2)</TopText>
-            <TopText>Your Wishlist (0)</TopText>
+            <TopText>Shopping Bag({cart.quantity})</TopText>
           </TopTexts>
           <TopButton type="filled">CHECKOUT NOW</TopButton>
         </Top>
         <Bottom>
           <Info>
             {cart.products.map((product) => (
-              <Product>
+              <Product key={product.product._id}>
                 <ProductDetail>
-                  <Image src={product.img} />
+                  <Image src={product.product.img} />
                   <Details>
                     <ProductName>
-                      <b>Product:</b> {product.title}
+                      <b>Product:</b> {product.product.title}
                     </ProductName>
                     <ProductId>
-                      <b>ID:</b> {product._id}
+                      <b>ID:</b> {product.product._id}
                     </ProductId>
-                    <ProductColor color={product.color} />
+                    <ProductColor color={product.product.color} />
                     <ProductSize>
-                      <b>Size:</b> {product.size}
+                      <b>Size:</b> {product.product.size}
                     </ProductSize>
                   </Details>
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                    <Add
+                      onClick={() =>
+                        dispatch(
+                          increaseProduct({
+                            product: product.product,
+                            quantity: 1,
+                          })
+                        )
+                      }
+                    />
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <Remove
+                      onClick={() =>
+                        dispatch(
+                          decreaseProduct({
+                            product: product.product,
+                            quantity: 1,
+                          })
+                        )
+                      }
+                    />
                   </ProductAmountContainer>
                   <ProductPrice>
-                    $ {product.price * product.quantity}
+                    VNĐ{" "}
+                    {new Intl.NumberFormat("vi-VN").format(
+                      product.product.price * product.quantity
+                    )}
                   </ProductPrice>
                 </PriceDetail>
               </Product>
@@ -233,19 +268,11 @@ const Cart = () => {
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Estimated Shipping</SummaryItemText>
-              <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-            </SummaryItem>
-            <SummaryItem>
-              <SummaryItemText>Shipping Discount</SummaryItemText>
-              <SummaryItemPrice>$ -5.90</SummaryItemPrice>
+              <SummaryItemPrice>$ {calculateTotalPrice()}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
+              <SummaryItemPrice>$ {calculateTotalPrice()}</SummaryItemPrice>
             </SummaryItem>
             <StripeCheckout
               name="Lama Shop"

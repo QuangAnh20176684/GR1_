@@ -1,10 +1,10 @@
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
@@ -69,7 +69,15 @@ const MenuItem = styled.div`
 `;
 
 const Navbar = () => {
-  const quantity = useSelector(state => state.cart.quantity)
+  const history = useHistory();
+  const quantity = useSelector((state) => state.cart.quantity);
+  const user = useSelector((state) => state.user);
+
+  const handleLogout = () => {
+    localStorage.removeItem("persist:root");
+    window.location.reload();
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -80,22 +88,52 @@ const Navbar = () => {
             <Search style={{ color: "gray", fontSize: 16 }} />
           </SearchContainer>
         </Left>
+
         <Center>
-          <Logo>HitaShop</Logo>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              cursor: "pointer",
+            }}
+          >
+            <Logo>HitaShop</Logo>
+          </Link>
         </Center>
         <Right>
-        <Link to="/register"><MenuItem>REGISTER</MenuItem></Link>
-          <Link to="/login">
-            <MenuItem>SIGN IN</MenuItem>
-            </Link>
+          {user?.currentUser ? (
+            <div>
+              {user?.currentUser?.username}(
+              <span
+                style={{
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+                onClick={() => handleLogout()}
+              >
+                Đăng xuất
+              </span>
+              )
+            </div>
+          ) : (
+            <Fragment>
+              <Link to="/register">
+                <MenuItem>REGISTER</MenuItem>
+              </Link>
+              <Link to="/login">
+                <MenuItem>SIGN IN</MenuItem>
+              </Link>
+            </Fragment>
+          )}
 
-            <Link to="/cart">
-              <MenuItem>
-                <Badge badgeContent={quantity} color="primary">
-                  <ShoppingCartOutlined />
-                </Badge>
-              </MenuItem>
-            </Link>
+          <Link to="/cart">
+            <MenuItem>
+              <Badge badgeContent={quantity} color="primary">
+                <ShoppingCartOutlined />
+              </Badge>
+            </MenuItem>
+          </Link>
         </Right>
       </Wrapper>
     </Container>
