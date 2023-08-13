@@ -173,7 +173,7 @@ const Cart = () => {
 
   const calculateTotalPrice = () => {
     
-    return new Intl.NumberFormat("vi-VN").format(
+    return new Intl.NumberFormat("en-US").format(
       (cart?.products ?? []).reduce(
         (result, productInfo) =>
           result + productInfo.quantity * productInfo.product.price,
