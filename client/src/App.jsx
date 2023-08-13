@@ -9,11 +9,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
-} from 'react-router-dom';
+  Redirect,
+} from "react-router-dom";
 import Success from "./pages/Success";
 import { useSelector } from "react-redux";
-import 'react-notifications/lib/notifications.css';
+import "react-notifications/lib/notifications.css";
+import { NotificationContainer } from "react-notifications";
 
 const App = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -40,6 +41,7 @@ const App = () => {
           {user ? <Redirect to="/" /> : <Register />}
         </Route>
       </Switch>
+      <NotificationContainer />
     </Router>
   );
 };

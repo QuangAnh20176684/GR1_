@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer from "./userRedux";
+import authReducer from "./authRedux";
 import productReducer from "./productRedux";
+import userReducer from "./userRedux";
 import {
   persistStore,
   persistReducer,
@@ -12,6 +13,9 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import logger from "redux-logger";
+import { connectRouter } from "connected-react-router";
+import { createBrowserHistory } from 'history'
 
 const persistConfig = {
   key: "root",
@@ -19,12 +23,17 @@ const persistConfig = {
   storage,
 };
 
-const rootReducer = combineReducers({
-  user: userReducer,
-  product: productReducer,
-});
+const rootReducer = (history) =>
+  combineReducers({
+    router: connectRouter(history),
+    auth: authReducer,
+    product: productReducer,
+    user: userReducer,
+  });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+export const history = createBrowserHistory();
+
+const persistedReducer = persistReducer(persistConfig, rootReducer(history));
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -33,7 +42,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat([logger]),
 });
 
 export let persistor = persistStore(store);

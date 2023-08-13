@@ -1,16 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { login } from "../redux/apiCalls";
 import { mobile } from "../responsive";
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from "react-redux";
 
-import { loginStart, resetRegister } from "../redux/userRedux";
-import { useEffect } from "react";
-import { NotificationContainer, NotificationManager } from 'react-notifications';
-import { REQUEST_STATE } from "../configs";
 import { useHistory } from "react-router-dom";
-
+import { REQUEST_STATE } from "../configs";
+import { resetLogin } from "../redux/userRedux";
+import { NotificationManager } from "react-notifications";
 
 const Container = styled.div`
   width: 100vw;
@@ -52,10 +49,6 @@ const Input = styled.input`
   padding: 10px;
 `;
 
-const InputWrapper = styled.div`
- width: 50%;
-`;
-
 const Button = styled.button`
   width: 40%;
   border: none;
@@ -77,15 +70,31 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-const Error = styled.span`
-  color: red;
-`;
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { isFetching, error } = useSelector((state) => state.user);
+  const history = useHistory();
+  const { isRequestLogin } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (isRequestLogin === REQUEST_STATE.SUCCESS) {
+      NotificationManager.success(
+        "Đăng nhập thành công",
+        "Thành công"
+      );
+      history.push("/");
+
+      dispatch(resetLogin());
+    }
+    if (isRequestLogin === REQUEST_STATE.FAILURE) {
+      NotificationManager.error(
+        "Tên tài khoán hoặc mật khẩu không chính xác",
+        "Thất bại"
+      );
+      dispatch(resetLogin());
+    }
+  }, [isRequestLogin]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -94,28 +103,27 @@ const Login = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>SIGN IN</Title>
+        <Title>Đăng nhập</Title>
         <Form>
-          {/* <InputWrapper style={{
-            width: '40%'
-          }}>
-            <Input placeholder="username" {...loginStart('username', { required: true })} />
-            {errors.usernam  && <ErrorMessage>Username is required</ErrorMessage>}
-          </InputWrapper> */}
-          
           <Input
-            placeholder="password"
+            placeholder="Username"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          <Input
+            placeholder="Mật khẩu"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={isFetching}>
-            LOGIN
+          <Button
+            onClick={handleClick}
+            disabled={isRequestLogin === REQUEST_STATE.REQUEST}
+          >
+            {isRequestLogin === REQUEST_STATE.REQUEST
+              ? "Đang đăng nhập"
+              : "Đăng nhập"}
           </Button>
-
-          {error && <Error>Something went wrong...</Error>}
-
-          <Link href="https://www.google.com/account/about/">DO NOT REMEMBER THE PASSWORD?</Link>
-          <Link href="http://localhost:3000/register">CREATE A NEW ACCOUNT</Link>
+          <Link href="http://localhost:3000/register">Tạo 1 tài khoản mới</Link>
         </Form>
       </Wrapper>
     </Container>
