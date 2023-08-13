@@ -7,7 +7,8 @@ const userSlice = createSlice({
     listUsers: [],
     listUsersState: REQUEST_STATE.INITITAL,
     deleteUserState: REQUEST_STATE.INITITAL,
-    detailUser: {},
+    updateUserState: REQUEST_STATE.INITITAL,
+    detailEditUser: {},
   },
   reducers: {
     getUsers: (state, action) => {
@@ -39,7 +40,16 @@ const userSlice = createSlice({
       state.deleteUserState = REQUEST_STATE.INITITAL;
     },
     detailUserSuccess: (state, action) => {
-      state.detailUser = action.payload;
+      state.detailEditUser = action.payload;
+    },
+    updateUser: (state, action) => {
+      state.updateUserState = REQUEST_STATE.REQUEST;
+    },
+    updateUserSuccess: (state, action) => {
+      state.updateUserState = REQUEST_STATE.SUCCESS;
+    },
+    updateUserReset: (state, action) => {
+      state.updateUserState = REQUEST_STATE.INITITAL;
     },
   },
 });
@@ -54,5 +64,8 @@ export const {
   deleteUserReset,
   deleteUserSuccess,
   detailUserSuccess,
+  updateUser,
+  updateUserReset,
+  updateUserSuccess
 } = userSlice.actions;
 export default userSlice.reducer;

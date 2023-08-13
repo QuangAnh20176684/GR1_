@@ -35,11 +35,11 @@ function App() {
           <Topbar />
           <div className="container">
             <Sidebar />
-            <Route path="/users">
-              <UserList />
-            </Route>
-            <Route path="/user/:userId">
+            <Route path="/user/:id">
               <User />
+            </Route>
+            <Route exact path="/users"  >
+              <UserList />
             </Route>
             <Route path="/newUser">
               <NewUser />
@@ -53,7 +53,7 @@ function App() {
             <Route path="/newproduct">
               <NewProduct />
             </Route>
-            <Redirect from="/" to="/users"></Redirect>
+            <Redirect from="*" to="/users"></Redirect>
           </div>
         </>
       </Switch>
