@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { userRequest } from "../requestMethods";
+import { useHistory } from "react-router-dom";
+import { checkoutAllProduct } from "../redux/cartRedux";
 
 const Success = () => {
+  const history = useHistory();
   const location = useLocation();
   //in Cart.jsx I sent data and cart. Please check that page for the changes.(in video it's only data)
   const data = location.state.stripeData;
   const cart = location.state.cart;
   const currentUser = useSelector((state) => state.user.currentUser);
   const [orderId, setOrderId] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const createOrder = async () => {
@@ -42,7 +46,13 @@ const Success = () => {
       {orderId
         ? `Order has been created successfully. Your order number is ${orderId}`
         : `Successfull. Your order is being prepared...`}
-      <button style={{ padding: 10, marginTop: 20 }}>Go to Homepage</button>
+      <button style={{ padding: 10, marginTop: 20 }}
+      onClick={()=>{
+        history.push("/");
+        dispatch(
+          checkoutAllProduct({})
+        )
+      }}>Go to Homepage</button>
     </div>
   );
 };
