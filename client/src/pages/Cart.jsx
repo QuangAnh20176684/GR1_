@@ -204,7 +204,7 @@ const Cart = () => {
       <Wrapper>
         <Title>YOUR BAG</Title>
         <Top>
-          <TopButton>CONTINUE SHOPPING</TopButton>
+          <TopButton onClick={()=>{history.push("/")}}>CONTINUE SHOPPING</TopButton>
           <TopTexts>
             <TopText>Shopping Bag({cart.quantity})</TopText>
           </TopTexts>
@@ -275,11 +275,11 @@ const Cart = () => {
               <SummaryItemPrice>$ {calculateTotalPrice()}</SummaryItemPrice>
             </SummaryItem>
             <StripeCheckout
-              name="Lama Shop"
-              image="https://avatars.githubusercontent.com/u/1486366?v=4"
+              name="Hita Shop"
+              image="https://beedesign.com.vn/wp-content/uploads/2020/08/tao-logo-shop-quan-ao-ny.jpg"
               billingAddress
               shippingAddress
-              description={`Your total is $${cart.total}`}
+              description={`YOUR TOTAL IS ${calculateTotalPrice()} VNĐ`}
               amount={cart.total * 100}
               token={onToken}
               stripeKey={KEY}
