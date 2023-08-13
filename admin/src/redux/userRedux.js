@@ -6,6 +6,8 @@ const userSlice = createSlice({
   initialState: {
     listUsers: [],
     listUsersState: REQUEST_STATE.INITITAL,
+    deleteUserState: REQUEST_STATE.INITITAL,
+    detailUser: {},
   },
   reducers: {
     getUsers: (state, action) => {
@@ -24,9 +26,33 @@ const userSlice = createSlice({
     getUsersReset: (state, action) => {
       state.listUsersState = REQUEST_STATE.INITITAL;
     },
+    deleteUser: (state, action) => {
+      state.deleteUserState = REQUEST_STATE.REQUEST;
+    },
+    deleteUserSuccess: (state, action) => {
+      state.deleteUserState = REQUEST_STATE.SUCCESS;
+    },
+    deleteUserFailure: (state, action) => {
+      state.deleteUserState = REQUEST_STATE.FAILURE;
+    },
+    deleteUserReset: (state, action) => {
+      state.deleteUserState = REQUEST_STATE.INITITAL;
+    },
+    detailUserSuccess: (state, action) => {
+      state.detailUser = action.payload;
+    },
   },
 });
 
-export const { getUsers, getUsersSuccess, getUsersFailure, getUsersReset } =
-  userSlice.actions;
+export const {
+  getUsers,
+  getUsersSuccess,
+  getUsersFailure,
+  getUsersReset,
+  deleteUser,
+  deleteUserFailure,
+  deleteUserReset,
+  deleteUserSuccess,
+  detailUserSuccess,
+} = userSlice.actions;
 export default userSlice.reducer;

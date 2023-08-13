@@ -3,14 +3,16 @@ import { DeleteOutline } from "@material-ui/icons";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getListUsers } from "../../redux/apiCalls";
+import { deleteUserApi, getListUsers } from "../../redux/apiCalls";
 import "./userList.css";
+import { REQUEST_STATE } from "../../configs";
 
 export default function UserList() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.listUsers);
+  const deleteUserState = useSelector((state) => state.user?.deleteUserState);
   const handleDelete = (id) => {
-    console.log("id: ", id);
+    deleteUserApi(dispatch, id);
   };
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -29,14 +31,16 @@ export default function UserList() {
     },
     { field: "email", headerName: "Email", width: 200 },
     {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-    {
-      field: "transaction",
-      headerName: "Transaction Volume",
-      width: 160,
+      field: "isAdmin",
+      headerName: "Vai trò",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div className="userListUser">
+            {params.row?.isAdmin ? "Admin" : "User"}
+          </div>
+        );
+      },
     },
     {
       field: "action",
@@ -46,7 +50,7 @@ export default function UserList() {
         return (
           <>
             <Link to={"/user/" + params.row.id}>
-              <button className="userListEdit">Edit</button>
+              <button className="userListEdit">Sửa</button>
             </Link>
             <DeleteOutline
               className="userListDelete"
@@ -61,6 +65,12 @@ export default function UserList() {
   useEffect(() => {
     getListUsers(dispatch);
   }, []);
+
+  useEffect(() => {
+    if (deleteUserState === REQUEST_STATE.SUCCESS) {
+      getListUsers(dispatch);
+    }
+  }, [deleteUserState]);
 
   return (
     <div className="userList">

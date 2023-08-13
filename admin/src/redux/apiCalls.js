@@ -1,4 +1,4 @@
-import { GET, POST } from "../fetchRequest";
+import { DELETE, GET, POST } from "../fetchRequest";
 import {
   loginFailure,
   loginReset,
@@ -20,6 +20,11 @@ import {
   updateProductSuccess,
 } from "./productRedux";
 import {
+  deleteUser,
+  deleteUserFailure,
+  deleteUserReset,
+  deleteUserSuccess,
+  detailUserSuccess,
   getUsers,
   getUsersFailure,
   getUsersReset,
@@ -32,7 +37,7 @@ export const login = async (dispatch, user) => {
     const res = await POST("/auth/login", user);
     dispatch(loginSuccess(res));
   } catch (err) {
-    console.log('err: ', err);
+    console.log("err: ", err);
     dispatch(loginFailure());
     dispatch(loginReset());
   }
@@ -86,4 +91,20 @@ export const getListUsers = async (dispatch, params) => {
     dispatch(getUsersFailure());
     dispatch(getUsersReset());
   }
+};
+
+export const deleteUserApi = async (dispatch, id) => {
+  dispatch(deleteUser());
+  try {
+    const res = await DELETE(`/users/${id}`);
+    dispatch(deleteUserSuccess(res));
+  } catch (err) {
+    dispatch(deleteUserFailure());
+    dispatch(deleteUserReset());
+  }
+};
+
+export const getUserByIdApi = async (dispatch, id) => {
+  const res = await GET(`/users/${id}`);
+  dispatch(detailUserSuccess(res));
 };
