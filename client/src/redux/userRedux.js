@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { REQUEST_STATE } from "../configs";
 
-const userSlice = createSlice({
-  name: "user",
+const authSlice = createSlice({
+  name: "auth",
   initialState: {
     currentUser: null,
     isRequestLogin: REQUEST_STATE.INITITAL,
@@ -47,5 +47,5 @@ export const {
   registerSuccess,
   registerFailure,
   resetRegister,
-} = userSlice.actions;
-export default userSlice.reducer;
+} = authSlice.actions;
+export default authSlice.reducer;

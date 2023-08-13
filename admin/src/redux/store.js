@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer from "./userRedux";
+import authReducer from "./authRedux";
 import productReducer from "./productRedux";
+import userReducer from "./userRedux";
 import {
   persistStore,
   persistReducer,
@@ -25,8 +26,9 @@ const persistConfig = {
 const rootReducer = (history) =>
   combineReducers({
     router: connectRouter(history),
-    user: userReducer,
+    auth: authReducer,
     product: productReducer,
+    user: userReducer,
   });
 
 export const history = createBrowserHistory();

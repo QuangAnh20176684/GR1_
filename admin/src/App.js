@@ -4,11 +4,10 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import { useSelector } from "react-redux";
-import { Route, Switch, useHistory, Redirect } from "react-router-dom";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
 import Topbar from "./components/topbar/Topbar";
-import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import NewProduct from "./pages/newProduct/NewProduct";
 import NewUser from "./pages/newUser/NewUser";
@@ -18,7 +17,7 @@ import User from "./pages/user/User";
 import UserList from "./pages/userList/UserList";
 
 function App() {
-  const admin = useSelector((state) => state.user.currentUser?.isAdmin);
+  const admin = useSelector((state) => state.auth?.currentUser?.isAdmin);
   const history = useHistory();
   useEffect(() => {
     if (!admin) {

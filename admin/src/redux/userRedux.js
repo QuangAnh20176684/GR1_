@@ -2,33 +2,31 @@ import { createSlice } from "@reduxjs/toolkit";
 import { REQUEST_STATE } from "../configs";
 
 const userSlice = createSlice({
-  name: "user",
+  name: "users",
   initialState: {
-    currentUser: null,
-    isLogin: REQUEST_STATE.INITITAL,
+    listUsers: [],
+    listUsersState: REQUEST_STATE.INITITAL,
   },
   reducers: {
-    loginStart: (state) => {
-      state.isLogin = REQUEST_STATE.REQUEST;
+    getUsers: (state, action) => {
+      state.listUsersState = REQUEST_STATE.REQUEST;
     },
-    loginSuccess: (state, action) => {
-      state.currentUser = action.payload;
-      state.isLogin = REQUEST_STATE.SUCCESS;
+    getUsersSuccess: (state, action) => {
+      state.listUsersState = REQUEST_STATE.SUCCESS;
+      state.listUsers = action.payload.map((user) => ({
+        id: user._id,
+        ...user,
+      }));
     },
-    loginFailure: (state) => {
-      state.error = true;
-      state.isLogin = REQUEST_STATE.FAILURE;
+    getUsersFailure: (state, action) => {
+      state.listUsersState = REQUEST_STATE.FAILURE;
     },
-    loginReset: (state) => {
-      state.isLogin = REQUEST_STATE.INITITAL;
-      state.currentUser = null;
-    },
-    logout: (state) => {
-      state.isLogin = REQUEST_STATE.INITITAL;
-      state.currentUser = null;
+    getUsersReset: (state, action) => {
+      state.listUsersState = REQUEST_STATE.INITITAL;
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, loginReset, logout } = userSlice.actions;
+export const { getUsers, getUsersSuccess, getUsersFailure, getUsersReset } =
+  userSlice.actions;
 export default userSlice.reducer;

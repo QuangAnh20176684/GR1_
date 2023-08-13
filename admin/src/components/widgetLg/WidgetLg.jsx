@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { userRequest } from "../../requestMethods";
 import "./widgetLg.css";
 import {format} from "timeago.js"
+import { GET } from "../../fetchRequest";
 
 export default function WidgetLg() {
   const [orders, setOrders] = useState([]);
@@ -9,7 +9,7 @@ export default function WidgetLg() {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const res = await userRequest.get("orders");
+        const res = await GET("orders");
         setOrders(res.data);
       } catch {}
     };

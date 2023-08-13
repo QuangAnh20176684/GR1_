@@ -3,14 +3,14 @@ import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { REQUEST_STATE } from "../../configs";
-import { login } from "../../redux/apiCalls";
+import { getListUsers, login } from "../../redux/apiCalls";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector((state) => state.user);
+  const auth = useSelector((state) => state.auth);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -18,16 +18,18 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user.isLogin === REQUEST_STATE.SUCCESS) {
-      history.push("/users");
+    if (auth.isLogin === REQUEST_STATE.SUCCESS) {
+      setTimeout(() => {
+        history.push("/users");
+      }, 0);
     }
-    if (user.isLogin === REQUEST_STATE.FAILURE) {
+    if (auth.isLogin === REQUEST_STATE.FAILURE) {
       NotificationManager.error(
         "Tài khoản hoặc mật khẩu không chính xác!",
         "Thất bại"
       );
     }
-  }, [user]);
+  }, [auth]);
 
   return (
     <div
