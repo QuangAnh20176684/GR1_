@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
     res.status(201).json(savedUser);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err); 
+    res.status(500).json(err);
   }
 });
 
@@ -38,23 +38,19 @@ router.post("/login", async (req, res) => {
 
     OriginalPassword !== req.body.password &&
       res.status(401).json("Wrong credentials!");
-
     const accessToken = jwt.sign(
       {
         id: user._id,
         isAdmin: user.isAdmin,
       },
       process.env.JWT_SEC,
-      {expiresIn:"3d"}
+      { expiresIn: "3d" }
     );
 
     const { password, ...others } = user._doc;
 
-    res.status(200).json({...others, accessToken});
-  } catch (err) {
-    res.status(500).json(err);
-    console.log('err: ', err);
-  }
+    res.status(200).json({ ...others, accessToken });
+  } catch (err) {}
 });
 
 module.exports = router;
