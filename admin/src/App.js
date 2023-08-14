@@ -53,7 +53,7 @@ function App() {
             <Route path="/newproduct">
               <NewProduct />
             </Route>
-            <Redirect from="*" to="/users"></Redirect>
+            {/* <Redirect from="*" to="/users"></Redirect> */}
           </div>
         </>
       </Switch>
