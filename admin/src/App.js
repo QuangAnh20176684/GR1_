@@ -1,7 +1,5 @@
 import { Fragment, useEffect } from "react";
-import {
-  NotificationContainer
-} from "react-notifications";
+import { NotificationContainer } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import { useSelector } from "react-redux";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
@@ -31,31 +29,33 @@ function App() {
         <Route path="/login">
           <Login />
         </Route>
-        <>
-          <Topbar />
-          <div className="container">
-            <Sidebar />
-            <Route path="/user/:id">
-              <User />
-            </Route>
-            <Route exact path="/users"  >
-              <UserList />
-            </Route>
-            <Route path="/newUser">
-              <NewUser />
-            </Route>
-            <Route path="/products">
-              <ProductList />
-            </Route>
-            <Route path="/product/:productId">
-              <Product />
-            </Route>
-            <Route path="/newproduct">
-              <NewProduct />
-            </Route>
-            {/* <Redirect from="*" to="/users"></Redirect> */}
-          </div>
-        </>
+        {admin && (
+          <>
+            <Topbar />
+            <div className="container">
+              <Sidebar />
+              <Route path="/user/:id">
+                <User />
+              </Route>
+              <Route exact path="/">
+                <UserList />
+              </Route>
+              <Route path="/newUser">
+                <NewUser />
+              </Route>
+              <Route path="/products">
+                <ProductList />
+              </Route>
+              <Route path="/product/:productId">
+                <Product />
+              </Route>
+              <Route path="/newproduct">
+                <NewProduct />
+              </Route>
+           
+            </div>
+          </>
+        )}
       </Switch>
       <NotificationContainer />
     </Fragment>

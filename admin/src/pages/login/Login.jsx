@@ -20,7 +20,7 @@ const Login = () => {
   useEffect(() => {
     if (auth.isLogin === REQUEST_STATE.SUCCESS) {
       setTimeout(() => {
-        history.push("/users");
+        history.push("/");
       }, 0);
     }
     if (auth.isLogin === REQUEST_STATE.FAILURE) {

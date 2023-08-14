@@ -11,10 +11,10 @@ export default function Sidebar() {
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Quản lý</h3>
           <ul className="sidebarList">
-            <Link to="/users" className="link">
+            <Link to="/" className="link">
               <li
                 className={`sidebarListItem ${
-                  router.location.pathname === "/users" && "active"
+                  router.location.pathname === "/" && "active"
                 }`}
               >
                 <PermIdentity className="sidebarIcon" />
