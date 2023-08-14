@@ -13,6 +13,7 @@ import Product from "./pages/product/Product";
 import ProductList from "./pages/productList/ProductList";
 import User from "./pages/user/User";
 import UserList from "./pages/userList/UserList";
+import OrderList from "./pages/OrderList/OrderList";
 
 function App() {
   const admin = useSelector((state) => state.auth?.currentUser?.isAdmin);
@@ -51,6 +52,9 @@ function App() {
               </Route>
               <Route path="/newproduct">
                 <NewProduct />
+              </Route>
+              <Route path="/orders">
+                <OrderList />
               </Route>
            
             </div>

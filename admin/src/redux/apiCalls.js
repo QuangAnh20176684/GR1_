@@ -5,6 +5,7 @@ import {
   loginStart,
   loginSuccess,
 } from "./authRedux";
+import { getOrdersSuccess } from "./orderRedux";
 import {
   addProductFailure,
   addProductStart,
@@ -123,4 +124,16 @@ export const updateUserByIdApi = async (dispatch, id, body) => {
     console.log("err: ", err);
     dispatch(updateUserReset());
   }
+};
+
+export const getAllOrders = async (dispatch, id) => {
+  const res = await GET(`/orders`);
+  dispatch(
+    getOrdersSuccess(
+      res.map((order) => ({
+        id: order?._id,
+        ...order,
+      }))
+    )
+  );
 };

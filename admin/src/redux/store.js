@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./authRedux";
 import productReducer from "./productRedux";
 import userReducer from "./userRedux";
+import orderReducer from "./orderRedux";
 import {
   persistStore,
   persistReducer,
@@ -29,6 +30,7 @@ const rootReducer = (history) =>
     auth: authReducer,
     product: productReducer,
     user: userReducer,
+    order: orderReducer,
   });
 
 export const history = createBrowserHistory();

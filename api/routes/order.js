@@ -9,7 +9,7 @@ const router = require("express").Router();
 
 //CREATE
 
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", async (req, res) => {
   const newOrder = new Order(req.body);
 
   try {
@@ -60,9 +60,10 @@ router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => {
 
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
   try {
-    const orders = await Order.find();
+    const orders = await Order.find().populate('products.productId');
     res.status(200).json(orders);
   } catch (err) {
+    console.log('err: ', err);
     res.status(500).json(err);
   }
 });
