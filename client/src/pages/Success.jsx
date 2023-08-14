@@ -36,16 +36,38 @@ const Success = () => {
   return (
     <div
       style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        textAlign: "center",
+        padding: "40px 0",
+        background: "#EBF0F5",
+        height:"400px"
       }}
     >
-      {orderId
-        ? `Order has been created successfully. Your order number is ${orderId}`
-        : `Successfull. Your order is being prepared...`}
+        <div style={{
+          borderRadius:"200px",
+          height:"200px",
+          width:"200px",
+          background: "#F8FAF5",
+          margin:"0 auto"}}
+        >
+        <i className="checkmark" 
+        style={{
+          color: "#9ABC66",
+          fontSize: "100px",
+          lineHeight: "200px",
+          marginLeft:"-15px"
+        }}>✓</i>
+        </div>
+        <h1 style={{
+           color: "#88B04B",
+           fontFamily: '"Nunito Sans", "Helvetica Neue", sans-serif',
+           fontWeight: 900,
+           fontSize: "40px",
+           marginBottom: "10px"
+        }}>Success</h1> 
+      <p>{orderId}
+        ? Order has been created successfully. Your order number is ${orderId}
+        : `Successfull. Your order is being prepared...`
+      </p>
       <button style={{ padding: 10, marginTop: 20 }}
       onClick={()=>{
         history.push("/");
@@ -58,17 +80,3 @@ const Success = () => {
 };
 
 export default Success;
-// fix xong bug rồi đấy, h bạn muốn làm gì
-// login ay ban 
-// Chua hieu lam 
-//phan d
-// hoac ban xem ho toi phan hien thi san pham voi 
-// login toi hoi t van :v
-
-
-// t ghi các bước phải làm nhé
-//  1. gọi API
-// 2. Hiển thị loading
-// 3. Có kết quả thì hiển thị ra màn hình
-// Bạn làm được bước nào rồi, phan hien thi san pham toi chua lam gi 
-// đâu, bạn gọi api như thế nào, toi da lam gi den no dau ban, that toi cha biet lam gi luon a :')
