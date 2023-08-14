@@ -70,7 +70,8 @@ export const updateProduct = async (id, product, dispatch) => {
   dispatch(updateProductStart());
   try {
     // update
-    dispatch(updateProductSuccess({ id, product }));
+    const res = await PUT(`/products/${id}`, product);
+    dispatch(updateProductSuccess({ id, product: res }));
   } catch (err) {
     dispatch(updateProductFailure());
   }
@@ -81,7 +82,7 @@ export const addProduct = async (product, dispatch) => {
     const res = await POST(`/products`, product);
     dispatch(addProductSuccess(res));
   } catch (err) {
-    console.log('err: ', err);
+    console.log("err: ", err);
     dispatch(addProductFailure());
   }
 };
@@ -119,7 +120,7 @@ export const updateUserByIdApi = async (dispatch, id, body) => {
     const res = await PUT(`/users/${id}`, body);
     dispatch(updateUserSuccess(res));
   } catch (err) {
-    console.log('err: ', err);
+    console.log("err: ", err);
     dispatch(updateUserReset());
   }
 };

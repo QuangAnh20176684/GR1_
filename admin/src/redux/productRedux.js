@@ -8,6 +8,7 @@ export const productSlice = createSlice({
     isFetching: false,
     error: false,
     isAddProduct: REQUEST_STATE.INITITAL,
+    isUpdateProduct: REQUEST_STATE.INITITAL,
   },
   reducers: {
     //GET ALL
@@ -41,18 +42,17 @@ export const productSlice = createSlice({
     },
     //UPDATE
     updateProductStart: (state) => {
-      state.isFetching = true;
+      state.isUpdateProduct = REQUEST_STATE.REQUEST;
       state.error = false;
     },
     updateProductSuccess: (state, action) => {
-      state.isFetching = false;
-      state.products[
-        state.products.findIndex((item) => item._id === action.payload.id)
-      ] = action.payload.product;
+      state.isUpdateProduct = REQUEST_STATE.SUCCESS;
     },
     updateProductFailure: (state) => {
-      state.isFetching = false;
-      state.error = true;
+      state.isUpdateProduct = REQUEST_STATE.FAILURE;
+    },
+    updateProductReset: (state) => {
+      state.isUpdateProduct = REQUEST_STATE.INITITAL;
     },
     //UPDATE
     addProductStart: (state) => {
@@ -63,10 +63,10 @@ export const productSlice = createSlice({
       state.products.push(action.payload);
     },
     addProductFailure: (state) => {
-      state.isAddProduct =REQUEST_STATE.FAILURE;
+      state.isAddProduct = REQUEST_STATE.FAILURE;
     },
     addProductReset: (state) => {
-      state.isAddProduct =REQUEST_STATE.INITITAL;
+      state.isAddProduct = REQUEST_STATE.INITITAL;
     },
   },
 });
@@ -85,6 +85,7 @@ export const {
   addProductSuccess,
   addProductFailure,
   addProductReset,
+  updateProductReset,
 } = productSlice.actions;
 
 export default productSlice.reducer;
