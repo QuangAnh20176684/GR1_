@@ -1,11 +1,25 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import "./newProduct.css";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../../firebase";
+import { addProduct } from "../../redux/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
+import { UPLOAD } from "../../fetchRequest";
+import { REQUEST_STATE } from "../../configs";
+import { NotificationManager } from "react-notifications";
+import { addProductReset } from "../../redux/productRedux";
 
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState([]);
+  const isAddProduct = useSelector((state) => state.product?.isAddProduct);
+
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -17,16 +31,45 @@ export default function NewProduct() {
     setCat(e.target.value.split(","));
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("files", file);
-    try {
-      // const uploadFile
-    } catch(err) {
-      console.log('err: ', err);
+    if (file) {
+      const formData = new FormData();
+      formData.append("files", file);
+      try {
+        let product = {
+          ...inputs,
+          categories: cat,
+        };
+
+        const uploadFile = await UPLOAD("/upload/images", file);
+        product = {
+          ...product,
+          img: uploadFile?.fileUrl,
+        };
+
+        addProduct(product, dispatch);
+      } catch (err) {
+        console.log("err: ", err);
+      }
+    } else {
+      NotificationManager.error("Vui lòng tải lên ảnh sản phẩm!", "Thất bại");
     }
   };
+
+  useEffect(() => {
+    if (isAddProduct === REQUEST_STATE.SUCCESS) {
+      NotificationManager.success("Tạo sản phẩm mới thành công!", "Thành công");
+      dispatch(addProductReset());
+    }
+    if (isAddProduct === REQUEST_STATE.FAILURE) {
+      NotificationManager.error(
+        "Một lỗi đã xảy ra khi thêm sản phẩm!",
+        "Thất bại"
+      );
+      dispatch(addProductReset());
+    }
+  }, [isAddProduct]);
 
   return (
     <div className="newProduct">
@@ -79,7 +122,7 @@ export default function NewProduct() {
           </select>
         </div>
         <button onClick={handleClick} className="addProductButton">
-          Create
+          {isAddProduct === REQUEST_STATE.REQUEST ? "Đang tạo" : "Tạo mới"}
         </button>
       </form>
     </div>

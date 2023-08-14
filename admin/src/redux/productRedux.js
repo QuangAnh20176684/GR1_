@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { REQUEST_STATE } from "../configs";
 
 export const productSlice = createSlice({
   name: "product",
@@ -6,6 +7,7 @@ export const productSlice = createSlice({
     products: [],
     isFetching: false,
     error: false,
+    isAddProduct: REQUEST_STATE.INITITAL,
   },
   reducers: {
     //GET ALL
@@ -54,16 +56,17 @@ export const productSlice = createSlice({
     },
     //UPDATE
     addProductStart: (state) => {
-      state.isFetching = true;
-      state.error = false;
+      state.isAddProduct = REQUEST_STATE.REQUEST;
     },
     addProductSuccess: (state, action) => {
-      state.isFetching = false;
+      state.isAddProduct = REQUEST_STATE.SUCCESS;
       state.products.push(action.payload);
     },
     addProductFailure: (state) => {
-      state.isFetching = false;
-      state.error = true;
+      state.isAddProduct =REQUEST_STATE.FAILURE;
+    },
+    addProductReset: (state) => {
+      state.isAddProduct =REQUEST_STATE.INITITAL;
     },
   },
 });
@@ -81,6 +84,7 @@ export const {
   addProductStart,
   addProductSuccess,
   addProductFailure,
+  addProductReset,
 } = productSlice.actions;
 
 export default productSlice.reducer;

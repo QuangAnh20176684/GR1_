@@ -59,7 +59,7 @@ export const getProducts = async (dispatch) => {
 export const deleteProduct = async (id, dispatch) => {
   dispatch(deleteProductStart());
   try {
-    // const res = await userRequest.delete(`/products/${id}`);
+    await DELETE(`/products/${id}`);
     dispatch(deleteProductSuccess(id));
   } catch (err) {
     dispatch(deleteProductFailure());
@@ -81,6 +81,7 @@ export const addProduct = async (product, dispatch) => {
     const res = await POST(`/products`, product);
     dispatch(addProductSuccess(res));
   } catch (err) {
+    console.log('err: ', err);
     dispatch(addProductFailure());
   }
 };
